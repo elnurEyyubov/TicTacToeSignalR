@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@model RoomRegistrationVM
 <h1>Lobby</h1>
 
 <div class="pt-4">
@@ -17,16 +17,16 @@
             <div class="d-flex flex-column justify-content-between">
                 <div style="height: 85vh;">
                     <ul class="form-area">
-                        <form>
+                        <form method="post">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Room</label>
-                                <input  class="form-control name-input" id="name" />
+                                <input asp-for="@Model.Name" class="form-control name-input" id="name" />
                             </div>
                             <div class="mb-3 row">
 
                                 <div class="col-3">
                                     <label for="imageurl" class="form-label">Room Type</label>
-                                    <select class="form-select" id="type" >
+                                    <select asp-for="@Model.isPrivate" class="form-select" id="type" >
                                         <option value="false">Public</option>
                                         <option value="true" selected>Private</option>
                                     </select>
@@ -34,7 +34,7 @@
 
                                 <div class="col-5 password-area">
                                     <label for="password" class="form-label">Password:</label>
-                                    <input class="form-control" id="password" />
+                                    <input asp-for="@Model.Password" class="form-control" id="password" />
                                 </div>
 
                             </div>
@@ -43,7 +43,7 @@
                                 <div class=" mb-3 text-danger">@ViewBag.Error</div>
                             }
 
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button asp-action="CreateRoom" asp-controller="Home" type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </ul>
                 </div>
@@ -112,7 +112,7 @@
         async function start() {
             try {
                 await connection.start();
-                // await connection.invoke("SendRooms")
+                await connection.invoke("SendRooms")
                 console.log("SignalR Connected.");
             } catch (err) {
                 console.log(err);
@@ -126,5 +126,15 @@
 
         // Start the connection.
         start();
+
+            $('#type').on('change', function() {
+                var value = $(this).val();
+                if (value == "false") {
+                    $(".password-area").val("")
+                    $(".password-area").hide();
+                } else {
+                    $(".password-area").show();
+                }
+            })
 </script>
 }

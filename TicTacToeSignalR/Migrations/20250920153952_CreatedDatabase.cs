@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicTacToeSignalR.Migrations
 {
     /// <inheritdoc />
-    public partial class CreatedUserTableAndGameTable : Migration
+    public partial class CreatedDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,8 +31,9 @@ namespace TicTacToeSignalR.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GameStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    isPrivate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isPrivate = table.Column<bool>(type: "bit", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

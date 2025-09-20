@@ -12,8 +12,8 @@ using TicTacToeSignalR.DataBaseAccess;
 namespace TicTacToeSignalR.Migrations
 {
     [DbContext(typeof(GameDBContext))]
-    [Migration("20250911081214_CreatedUserTableAndGameTable")]
-    partial class CreatedUserTableAndGameTable
+    [Migration("20250920153952_CreatedDatabase")]
+    partial class CreatedDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -170,12 +170,15 @@ namespace TicTacToeSignalR.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("isPrivate")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isPrivate")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
