@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+@model LoginUserVM
+
+<h1 class="mt-2">Login</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input asp-for="@Model.Username" class="form-control name-input" id="name" />
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input asp-for="@Model.Password" class="form-control name-input" id="password" />
+    </div>
+    <button asp-action="Login" asp-controller="Account" type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<div class="mb-3">
+    <div>Go to <a href="/Account/Register">Register page</a></div>
+</div>
+

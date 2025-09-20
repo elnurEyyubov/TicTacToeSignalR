@@ -1,0 +1,130 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1>Lobby</h1>
+
+<div class="pt-4">
+    <div class="row" style="height: 90vh;">
+        <div class="col-md-3 py-1" style="border:1px solid silver">
+            <div>
+                Rooms:
+            </div>
+            <ul class="list-group">
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="d-flex flex-column justify-content-between">
+                <div style="height: 85vh;">
+                    <ul class="form-area">
+                        <form>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Room</label>
+                                <input  class="form-control name-input" id="name" />
+                            </div>
+                            <div class="mb-3 row">
+
+                                <div class="col-3">
+                                    <label for="imageurl" class="form-label">Room Type</label>
+                                    <select class="form-select" id="type" >
+                                        <option value="false">Public</option>
+                                        <option value="true" selected>Private</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-5 password-area">
+                                    <label for="password" class="form-label">Password:</label>
+                                    <input class="form-control" id="password" />
+                                </div>
+
+                            </div>
+                            @if (ViewBag.Error is not null)
+                            {
+                                <div class=" mb-3 text-danger">@ViewBag.Error</div>
+                            }
+
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" style="color:black;" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="password" class="col-form-label">Password:</label>
+                        <input  type="text" class="form-control" id="password-field">
+                        <input hidden id="namefield" />
+                        <input hidden value="true" id="isprivatefield" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Join</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script src="~/js/microsoft-signalr/signalr.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/lobby")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+
+            connection.on("ReceiveRooms", function(data) {
+            console.log("Data:")
+            console.log(data)
+            $(".list-group").html(data.map(x => x.isPrivate ? `
+            <li class='list-group-item bg-secondary text-white mb-1' style='cursor:pointer' id='${x.name}' ">
+                <div class="row">
+
+            <div class="col mb-2">${x.name} - ${x.playerCount} players
+                <span class="badge bg-danger text-end">Private</span>
+                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="${x.name}">Join</button>
+                </div>
+            </li>` : `
+            <li class='list-group-item bg-secondary text-white mb-1' style='cursor:pointer' id='${x.name}' ">
+                <div class="row">
+
+            <div class="col mb-2">${x.name} - ${x.playerCount} players
+                <span class="badge bg-success text-end">Public</span>
+                </div>
+                <a href="/Home/Index?roomname=${x.name}"  type="button" class="btn btn-primary">Join</a>
+                </div>
+            </li>`))
+        })
+
+        async function start() {
+            try {
+                await connection.start();
+                // await connection.invoke("SendRooms")
+                console.log("SignalR Connected.");
+            } catch (err) {
+                console.log(err);
+                setTimeout(start, 5000);
+            }
+        };
+
+        connection.onclose(async () => {
+            await start();
+        });
+
+        // Start the connection.
+        start();
+</script>
+}
