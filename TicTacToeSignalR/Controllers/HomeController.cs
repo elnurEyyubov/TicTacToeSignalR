@@ -36,6 +36,7 @@ namespace TicTacToeSignalR.Controllers
             vm.Name = vm.Name.Trim();
             Game game = vm;
             await _context.Games.AddAsync(game);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

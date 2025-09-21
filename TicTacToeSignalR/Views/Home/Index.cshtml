@@ -87,12 +87,12 @@
 
             connection.on("ReceiveRooms", function(data) {
             console.log("Data:")
-            console.log(data)
+            console.log(data[0])
             $(".list-group").html(data.map(x => x.isPrivate ? `
             <li class='list-group-item bg-secondary text-white mb-1' style='cursor:pointer' id='${x.name}' ">
                 <div class="row">
 
-            <div class="col mb-2">${x.name} - ${x.playerCount} players
+            <div class="col mb-2">${x.name} - ${x.status} players
                 <span class="badge bg-danger text-end">Private</span>
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="${x.name}">Join</button>
@@ -101,7 +101,7 @@
             <li class='list-group-item bg-secondary text-white mb-1' style='cursor:pointer' id='${x.name}' ">
                 <div class="row">
 
-            <div class="col mb-2">${x.name} - ${x.playerCount} players
+            <div class="col mb-2">${x.name} - ${x.status} players
                 <span class="badge bg-success text-end">Public</span>
                 </div>
                 <a href="/Home/Index?roomname=${x.name}"  type="button" class="btn btn-primary">Join</a>
@@ -112,7 +112,7 @@
         async function start() {
             try {
                 await connection.start();
-                await connection.invoke("SendRooms")
+                // await connection.invoke("SendRooms")
                 console.log("SignalR Connected.");
             } catch (err) {
                 console.log(err);

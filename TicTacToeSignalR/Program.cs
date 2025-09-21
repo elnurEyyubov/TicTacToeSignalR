@@ -41,7 +41,7 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession();
-app.MapHub<GameHub>("/lobby");
+app.MapHub<LobbyHub>("/lobby");
 app.MapHub<GameHub>("/game");
 
 app.UseRouting();
