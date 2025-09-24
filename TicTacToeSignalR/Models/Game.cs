@@ -7,7 +7,7 @@ namespace TicTacToeSignalR.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<User> players { get; set; }
+        public ICollection<User> players { get; set; } = new List<User>();
         public string GameStatus { get; set; } = "waiting"; // waiting / in-progress / finished
         public bool isPrivate { get; set; }
         public string? Password { get; set; }
